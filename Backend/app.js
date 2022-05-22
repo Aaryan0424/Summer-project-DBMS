@@ -1,3 +1,4 @@
+
 const express = require("express");
 const bodyParser=require("body-parser");
 const mongo = require('mongodb');
@@ -21,7 +22,8 @@ app.post("/register",function(req,res){
     var age=req.body.age;
     var number=req.body.number;
     const { MongoClient, ServerApiVersion } = require('mongodb');
-    var uri= "mongodb+srv://User:35WTQ4FNBilOpBcO@cluster0.hago4.mongodb.net/?retryWrites=true&w=majority";
+    var uri= "mongodb+srv://User:ApaxduvnbGRK@cluster0.3aawx.mongodb.net/?retryWrites=true&w=majority";
+   // var uri= "mongodb://User:EnPETSDyIFRAkcD@my-atlas-cluster-shard-00-00-mdyjt.mongodb.net:27017,my-atlas-cluster-shard-00-01-mdyjt.mongodb.net:27017,my-atlas-cluster-shard-00-02-mdyjt.mongodb.net:27017/mydb?ssl=true&replicaSet=my-atlas-cluster-shard-0&authSource=admin&retryWrites=true&w=majority";
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
     client.connect(err => {
     const collection = client.db("Cluster0").collection("Details");
@@ -52,7 +54,7 @@ app.post("/login",function(req,res){
     const emailID=req.body.email;
     const password=req.body.password;
     const { MongoClient, ServerApiVersion } = require('mongodb');
-    const uri = "mongodb+srv://User:35WTQ4FNBilOpBcO@cluster0.hago4.mongodb.net/?retryWrites=true&w=majority";
+    const uri = "mongodb+srv://User:ApaxduvnbGRK@cluster0.3aawx.mongodb.net/?retryWrites=true&w=majority";
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
     client.connect(err => {
         const collection = client.db("Cluster0").collection("Details");
@@ -82,3 +84,4 @@ app.post("/login",function(req,res){
 app.listen(3000,function(req,res){
     console.log("Running on 3000");
 });
+//ApaxduvnbGRK
