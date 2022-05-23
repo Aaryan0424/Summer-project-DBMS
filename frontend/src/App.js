@@ -3,7 +3,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <p>E-commerce Site</p>
+        E-commerce Site
       </header>
     </div>
   );
