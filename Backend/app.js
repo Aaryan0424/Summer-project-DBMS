@@ -1,5 +1,6 @@
 
 const express = require("express");
+const https=require("https");
 const bodyParser=require("body-parser");
 const mongo = require('mongodb');
 const app=express();
@@ -38,8 +39,39 @@ app.post("/register",function(req,res){
                                 "number":number
                             },function(err,result){
                                 if (err) throw err;
-                            });
-                            res.send("Registered Succesfully!");
+                            }); const data={
+                                members:[
+                                    {
+                                        email_address: emailID,
+                                        status:"subscribed",
+                                        merge_fields:{
+                                            FNAME:name,
+                                        }
+                                    }
+                                ]
+                            }
+                            const options={
+                                method:"POST",
+                                auth:"Summer:97597cfe2f2fa651de623ec6431fb1c8-us11"
+                            }
+                            const jsonData=JSON.stringify(data);
+                            const url="https://us11.api.mailchimp.com/3.0/lists/e5e94014a3";
+                           
+                           const request= https.request(url,options,function(response){
+                                response.on("data",function(data){
+                                    console.log(JSON.parse(data));
+                                })
+                            })
+                            request.write(jsonData);
+                            request.end()
+                            if (res.statusCode==200){
+                                res.send("Registered Succesfully!");
+                            }
+                            else{
+                                res.send("Error, Try again Later");
+                            }
+                             
+
             }
             else{
                 res.send(emailID+" is already in use!");
