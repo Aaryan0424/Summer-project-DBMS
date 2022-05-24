@@ -5,7 +5,6 @@ const mongo = require('mongodb');
 const bcrypt = require('bcryptjs');
 require('dotenv').config()
 const JWT_SECRET = process.env.JWT_SECRET
-// console.log(JWT_SECRET)
 const jwt = require('jsonwebtoken')
 const app = express();
 
