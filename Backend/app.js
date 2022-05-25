@@ -1,119 +1,75 @@
-
 const express = require("express");
-const https=require("https");
-const bodyParser=require("body-parser");
-const mongo = require('mongodb');
-const app=express();
+const https = require("https");
+const bodyParser = require("body-parser");
+require('dotenv').config()
+const app = express();
+const User = require('./models/user')
 app.use(bodyParser.urlencoded({ extended: true }));
-app.get("/",function(req,res){
-    res.sendFile(__dirname+"/index.html")
+app.get("/", function (req, res) {
+    res.sendFile(__dirname + "/index.html")
 });
-app.get("/Login",function(req,res){
-    res.sendFile(__dirname+"/Login.html")
+app.get("/Login", function (req, res) {
+    res.sendFile(__dirname + "/Login.html")
 });
-app.get("/Register",function(req,res){
-    res.sendFile(__dirname+"/Register.html")
+app.get("/Register", function (req, res) {
+    res.sendFile(__dirname + "/Register.html")
 });
+const mongoose = require('mongoose')
+mongoose.connect(process.env.DB_URL, {
 
-app.post("/register",function(req,res){
-    console.log(req.body);
-    var emailID=req.body.email;
-    var password=req.body.password;
-    var name=req.body.name;
-    var age=req.body.age;
-    var number=req.body.number;
-    const { MongoClient, ServerApiVersion } = require('mongodb');
-    var uri= "mongodb+srv://User:ApaxduvnbGRK@cluster0.3aawx.mongodb.net/?retryWrites=true&w=majority";
-   // var uri= "mongodb://User:EnPETSDyIFRAkcD@my-atlas-cluster-shard-00-00-mdyjt.mongodb.net:27017,my-atlas-cluster-shard-00-01-mdyjt.mongodb.net:27017,my-atlas-cluster-shard-00-02-mdyjt.mongodb.net:27017/mydb?ssl=true&replicaSet=my-atlas-cluster-shard-0&authSource=admin&retryWrites=true&w=majority";
-    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-    client.connect(err => {
-    const collection = client.db("Cluster0").collection("Details");
-        collection.findOne({"email":emailID},function(err,result){
-            if (err) throw err;
-            if(result==null){
-                collection.insertOne({
-                                "name":name,
-                                "email":emailID,
-                                "password":password,
-                                "age":age,
-                                "number":number
-                            },function(err,result){
-                                if (err) throw err;
-                            }); const data={
-                                members:[
-                                    {
-                                        email_address: emailID,
-                                        status:"subscribed",
-                                        merge_fields:{
-                                            FNAME:name,
-                                        }
-                                    }
-                                ]
-                            }
-                            const options={
-                                method:"POST",
-                                auth:"Summer:97597cfe2f2fa651de623ec6431fb1c8-us11"
-                            }
-                            const jsonData=JSON.stringify(data);
-                            const url="https://us11.api.mailchimp.com/3.0/lists/e5e94014a3";
-                           
-                           const request= https.request(url,options,function(response){
-                                response.on("data",function(data){
-                                    console.log(JSON.parse(data));
-                                })
-                            })
-                            request.write(jsonData);
-                            request.end()
-                            if (res.statusCode==200){
-                                res.send("Registered Succesfully!");
-                            }
-                            else{
-                                res.send("Error, Try again Later");
-                            }
-                             
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+})
+app.post("/register", async function (req, res) {
+   // console.log(req.body)
+    const user = new User(req.body)
+    try {
 
-            }
-            else{
-                res.send(emailID+" is already in use!");
-            }
-                        
-        });
-    //client.close();
-    });
+        await user.save()
+        const token = await user.generateAuthTokens();
+        const data = {
+            members: [
+                {
+                    email_address: req.body.email,
+                    status: "subscribed",
+                    merge_fields: {
+                        FNAME: req.body.name,
+                    }
+                }
+            ]
+        }
+        const options = {
+            method: "POST",
+            auth: process.env.auth_email,
+            // update_existing: true
+        }
+        const jsonData = JSON.stringify(data);
+        const url = process.env.MAIL_URL
+        const request = https.request(url, options, function (response) {
+            response.on("data", function (data) {
+                //console.log(JSON.parse(data));
+            })
+        })
+        request.write(jsonData);
+        request.end()
+        //console.log(token)
+        res.status(201).send({ user, token, "message": "Hello " + req.body.name })
+    } catch (e) {
+        //console.log("Heelo");
+        res.status(400).send(e)
+    }
 });
-app.post("/login",function(req,res){
-    console.log(req.body);
-    const emailID=req.body.email;
-    const password=req.body.password;
-    const { MongoClient, ServerApiVersion } = require('mongodb');
-    const uri = "mongodb+srv://User:ApaxduvnbGRK@cluster0.3aawx.mongodb.net/?retryWrites=true&w=majority";
-    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-    client.connect(err => {
-        const collection = client.db("Cluster0").collection("Details");
-        //console.log(emailID);
-        collection.findOne({"email":emailID},function(err,result){
-            if (err) throw err;
-            //console.log(result.password);
-            // console.log(result);
-            // console.log(password);
-            if(result==null){
-                res.send("Invalid Username or Password!");
-            }
-            else if(result.password==password){
-               
-                res.send("Logged In succesfully. Hello "+result.name);
-            }
-            else {
-                res.send("Invalid Password or Username");
-            }
-            //console.log(result);
-        });
-    //client.close();
-    });
-
+app.post("/login", async function (req, res) {
+    try {
+        const user = await User.findByCredentials(req.body.email, req.body.password)
+        const token = await user.generateAuthTokens();
+        //await user.save()
+        res.send({ user, token })
+    }
+    catch (e) {
+        res.status(400).send()
+    }
 });
-
-app.listen(3000,function(req,res){
+app.listen(3000, function (req, res) {
     console.log("Running on 3000");
 });
-//ApaxduvnbGRK
