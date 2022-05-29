@@ -10,21 +10,16 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
-<<<<<<< HEAD
-=======
     "bcryptjs": "^2.4.3",
->>>>>>> 55ca807a95468b506cd9b47574e6be9520038d18
     "body-parser": "^1.20.0",
+    "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
+    "express-session": "^1.17.3",
     "https": "^1.0.0",
     "jsonwebtoken": "^8.5.1",
-<<<<<<< HEAD
-    "mongodb": "^4.6.0"
-=======
     "mongodb": "^4.6.0",
     "mongoose": "^6.3.4",
     "validator": "^13.7.0"
->>>>>>> 55ca807a95468b506cd9b47574e6be9520038d18
   }
 }

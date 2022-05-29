@@ -4,7 +4,17 @@ const bodyParser = require("body-parser");
 require('dotenv').config()
 const app = express();
 const User = require('./models/user')
+const cookieParser = require("cookie-parser");
+const sessions = require('express-session');
+const oneDay = 1000 * 60 * 60 * 24;
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(sessions({
+    secret: process.env.SESSION_SECRET,
+    saveUninitialized:true,
+    cookie: { maxAge: oneDay },
+    resave: false
+}));
 app.get("/", function (req, res) {
     res.sendFile(__dirname + "/index.html")
 });
@@ -63,12 +73,21 @@ app.post("/login", async function (req, res) {
     try {
         const user = await User.findByCredentials(req.body.email, req.body.password)
         const token = await user.generateAuthTokens();
-        //await user.save()
-        res.send({ user, token })
+        var session;
+        session=req.session;
+        session.userid=req.body.email;
+        console.log(req.session)
+        res.send(`Hey there, welcome <a href='/logout'>click to logout</a>`);
+        await user.save()
+        //res.send({ user, token })
     }
     catch (e) {
         res.status(400).send()
     }
+});
+app.get("/logout",function(req,res){
+    req.session.destroy();
+    res.redirect('/');
 });
 app.listen(3000, function (req, res) {
     console.log("Running on 3000");
