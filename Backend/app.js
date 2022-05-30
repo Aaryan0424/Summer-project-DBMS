@@ -6,6 +6,7 @@ const app = express();
 const User = require('./models/user')
 const cookieParser = require("cookie-parser");
 const sessions = require('express-session');
+const MongoStore=require("connect-mongo");
 const oneDay = 1000 * 60 * 60 * 24;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -13,9 +14,19 @@ app.use(sessions({
     secret: process.env.SESSION_SECRET,
     saveUninitialized:true,
     cookie: { maxAge: oneDay },
-    resave: false
+    resave: false,
+    store:MongoStore.create({
+        mongoUrl:"mongodb+srv://User:ApaxduvnbGRK@cluster0.3aawx.mongodb.net/cluster1?retryWrites=true&w=majority",
+        ttl: 14 * 24 * 60 * 60,
+        autoRemove: 'native' 
+    })
 }));
 app.get("/", function (req, res) {
+    let ses=req.session
+    console.log(ses);
+    if(ses.userid!=null){
+        return res.redirect('/user');
+    }
     res.sendFile(__dirname + "/index.html")
 });
 app.get("/Login", function (req, res) {
@@ -24,7 +35,8 @@ app.get("/Login", function (req, res) {
 app.get("/Register", function (req, res) {
     res.sendFile(__dirname + "/Register.html")
 });
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const { NULL } = require("mysql/lib/protocol/constants/types");
 mongoose.connect(process.env.DB_URL, {
 
     useUnifiedTopology: true,
@@ -77,6 +89,7 @@ app.post("/login", async function (req, res) {
         session=req.session;
         session.userid=req.body.email;
         console.log(req.session)
+        req.session.save();
         res.send(`Hey there, welcome <a href='/logout'>click to logout</a>`);
         await user.save()
         //res.send({ user, token })
@@ -85,6 +98,9 @@ app.post("/login", async function (req, res) {
         res.status(400).send()
     }
 });
+app.get("/user",function(req,res){
+    res.send("Hello click here to <a href='/logout'> logout </a>")
+})
 app.get("/logout",function(req,res){
     req.session.destroy();
     res.redirect('/');
