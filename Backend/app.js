@@ -16,7 +16,7 @@ app.use(sessions({
     cookie: { maxAge: oneDay },
     resave: false,
     store:MongoStore.create({
-        mongoUrl:"mongodb+srv://User:ApaxduvnbGRK@cluster0.3aawx.mongodb.net/cluster1?retryWrites=true&w=majority",
+        mongoUrl:process.env.DB_URL,
         ttl: 14 * 24 * 60 * 60,
         autoRemove: 'native' 
     })
