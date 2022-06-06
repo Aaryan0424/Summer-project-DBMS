@@ -18,9 +18,6 @@ export const UserLoginReducer = createReducer([], (builder) => {
     .addCase(USER_LOGIN_FAIL, (state, action) => {
       return { loading: false, error: action.payload };
     })
-    .addCase(USER_LOGOUT, (state, action) => {
-      return {};
-    })
     .addDefaultCase((state, action) => {
         return state;
     })
