@@ -97,6 +97,7 @@ app.post("/login", async function (req, res) {
         res.json({
             userInfo: 
             {
+                id : user.id,
                 name : user.name ,
                 email : user.email,
                 token : token
@@ -104,8 +105,11 @@ app.post("/login", async function (req, res) {
         })
         await user.save()
     }
-    catch (e) {
-        res.status(400).send()
+    catch(error) {
+        // console.log(error);
+        res.status(400).json({
+            message : error.message,
+        });
     }
 });
 app.get("/logout",function(req,res){
