@@ -53,3 +53,20 @@ body {
 }
 
 
+@media screen and (max-width: 768px) {
+  .nav{
+    background-color: #47555E;
+  }
+  .nav div.main_list ul {
+    flex-direction: column;
+  }
+  .nav div.main_list{
+    float: none;
+  }
+
+  .nav div.main_list ul li {
+    background-color: #303841;
+    /* border: 10px 10px white solid; */
+  }
+
+}

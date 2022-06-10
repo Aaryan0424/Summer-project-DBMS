@@ -11,7 +11,7 @@ html {
     position: absolute;
     top: 45%;
     left: 48.5%;
-    width: 350px;
+    width: 375px;
     padding: 40px;
     padding-top: 30px;
     transform: scale(1.3) translate(-35%, -35%);
@@ -172,7 +172,8 @@ html {
   @media only screen and (max-width: 768px) {
     /* For mobile phones: */
     .login-box {
-        height: auto;
+      width: 340px;
+      height: auto;
       transform: scale(1) translate(-48.5%, -45%);
     }
     .login-box h2{
