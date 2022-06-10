@@ -40,15 +40,15 @@ function Login( { history , location } ) {
   
 
   return (
-    <div class="login-box">
+    <div className = "login">
       <h2>Login</h2>
       {error && <h1>{error}</h1>}
       <form>
-        <div class="user-box">
+        <div className = "user">
           <input type="text" name="" required="" onChange={details1} />
           <label>Username / E-mail ID</label>
         </div>
-        <div class="user-box">
+        <div className = "user">
           <input type="password" name="" required="" onChange={details2} />
           <label>Password</label>
         </div>
