@@ -46,10 +46,9 @@ mongoose.connect(process.env.DB_URL, {
     useNewUrlParser: true,
 })
 app.post("/register", async function (req, res) {
-   // console.log(req.body)
+//    console.log(req.body)
     const user = new User(req.body)
     try {
-
         await user.save()
         const token = await user.generateAuthTokens();
         const data = {
@@ -78,10 +77,14 @@ app.post("/register", async function (req, res) {
         request.write(jsonData);
         request.end()
         //console.log(token)
+        console.log(user);
         res.status(201).send({ user, token, "message": "Hello " + req.body.name })
     } catch (e) {
         //console.log("Heelo");
-        res.status(400).send(e)
+        // res.status(400).send(e)
+        res.status(400).json({
+            message : e.message,
+        });
     }
 });
 app.post("/login", async function (req, res) {

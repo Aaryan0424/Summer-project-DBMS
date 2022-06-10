@@ -4,7 +4,9 @@ import "../styles/Navbar.css";
 
 const Home = () => {
   return (
-    <Navbar/>
+    <div>
+      <Navbar/>
+    </div>
   );
 };
 
