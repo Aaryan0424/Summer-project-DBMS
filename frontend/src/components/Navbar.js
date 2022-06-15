@@ -1,51 +1,79 @@
-import React from "react";
+import {React} from 'react';
+import { useEffect , useState } from "react";
 import "../styles/Navbar.css";
+import { useSelector } from "react-redux";
+const Dashboard = () => {
+    document.body.style.background = "#47555E";
 
-import { useSelector ,useDispatch } from "react-redux";
-import { createBrowserHistory } from "history";
-
-const Navbar = () => {
-  document.body.style.background = "#47555E";
-  const userLogin = useSelector((state) => state.userLogin);
+    const userLogin = useSelector((state) => state.userLogin);
     
-  const { loading , error , userInfo } = userLogin;
+    const { loading , error , userInfo } = userLogin;
 
-  const check = () =>{
-    if(userInfo){
-      return true;
+    const check = () =>{
+        if(userInfo){
+        return true;
+        }
+        else
+        return false;
     }
-    else
-    return false;
-  }
-  const Logouthandler = (event) => { 
-    localStorage.removeItem('userInfo');
-  }
-  return (
-    <nav className="nav">
-      <div class="container">
-        <div id="mainListDiv" class="main_list">
-          <ul class="navlinks">
-            <li>
-              <a href="/">About</a>
-            </li>
-            <li>
-            { check() ? <a href ="http://localhost:5000/logout"  onClick={Logouthandler}>Logout</a> 
-            :
-            <a href="/login"> Login </a> }
-            </li>
-            {check() ? "" : 
-              <li>
-              <a href="/Register">Register</a>
-              </li>
+    const Logouthandler = (event) => { 
+        localStorage.removeItem('userInfo');
+    }
+    useEffect( () => {
+        const handlescroll = () => {
+            const check = window.scrollY > 10;
+            if(check)
+            {
+                document.querySelector(".navbar").classList.add("active");
+            }   
+            else
+            {
+                document.querySelector(".navbar").classList.remove("active");
             }
-            <li>
-              <a href="/">Contact-Us</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-  );
-};
+        }  
+        document.addEventListener("scroll", handlescroll);
+        return () => {
+            document.removeEventListener("scroll", handlescroll);
+        }
+},[]);
 
-export default Navbar;
+    const [show, setShow] = useState(false);
+
+    return(
+        <header className ="header">
+        <nav className="navbar navbar-expand-lg fixed-top ">
+            <div className="container">
+                <a href="#" className = "navbar-brand text-uppercase font-weight-bold" id='logo-name'>Transparent Nav</a>
+            <button type="button" data-toggle = "collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" className="navbar-toggler navbar-toggler-right" onClick={()=>setShow(!show)}>Click</button>
+                
+                <div id = "navbarSupportedContent" className = "collapse navbar-collapse" style={show?{display:"block"}:{display:"none"}}>
+                    <ul className="navbar-nav ml-auto text-xl ">
+                        <li className="nav-item active pr-24"><a href="/" className="nav-link text-uppercase font-weight-bold">About <span class="sr-only">(current)</span></a></li>
+                        { 
+                        check() ? 
+                        <li className="nav-item pr-24"><a href="/Dashboard" className="nav-link text-uppercase font-weight-bold">Dashboard</a></li>
+                        :
+                        null
+                        }
+                        { 
+                        check() ? 
+                        <li className="nav-item pr-24"><a href="http://localhost:5000/logout" className="nav-link text-uppercase font-weight-bold" onClick={Logouthandler}>Logout</a></li>
+                        :
+                        <li className="nav-item pr-24"><a href="/login" className="nav-link text-uppercase font-weight-bold">Login</a></li>
+                        }
+                        {
+                        check() ? 
+                        "" 
+                        :
+                        <li className="nav-item pr-24"><a href="/Register" className="nav-link text-uppercase font-weight-bold">Register</a></li>
+                        }
+                        <li className="nav-item"><a href="/" className="nav-link text-uppercase font-weight-bold">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+</header>
+    );
+}
+
+export default Dashboard;
