@@ -1,72 +1,82 @@
+/*
+*
+* ==========================================
+* CUSTOM UTIL CLASSES
+* ==========================================
+*
+*/
 @import url("https://fonts.googleapis.com/css?family=Quicksand:400,500,700");
+.navbar {
+    transition: all 0.4s;
+}
 
-html,
+.navbar .nav-link {
+    color: #fff;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+    color: rgb(248, 36, 36);
+    text-decoration: none;
+}
+
+.navbar .navbar-brand {
+    color: #fff;
+}
+
+#logo-name{
+    font-size: 25px;
+    font-family: Quicksand, sans-serif;
+}
+
+/* Change navbar styling on scroll */
+.navbar.active {
+    background: #fff;
+    box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar.active .nav-link {
+    color: #555;
+}
+
+.navbar.active .nav-link:hover,
+.navbar.active .nav-link:focus {
+    color: #555;
+    text-decoration: none;
+}
+
+.navbar.active .navbar-brand {
+    color: #555;
+}
+
+
+/* Change navbar styling on small viewports */
+@media (max-width: 991.98px) {
+    .navbar {
+        background: #fff;
+    }
+
+    .navbar .navbar-brand, .navbar .nav-link {
+        color: #555;
+    }
+}
+
+
+
+/*
+*
+* ==========================================
+* FOR DEMO PURPOSES
+* ==========================================
+*
+*/
+.text-small {
+    font-size: 0.9rem !important;
+}
+
+
 body {
-  scroll-behavior: smooth;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Quicksand", sans-serif;
-  font-size: 62.5%; 
-  font-size: 10px;
-}
-.nav {
-  width: 100%;
-  height: 65px;
-  position: fixed;
-  line-height: 65px;
-  text-align: center;
-  background-color: #303841;
-}
-
-.nav div.main_list {
-  height: 65px;
-  float: right;
-}
-
-.nav div.main_list ul {
-  width: 100%;
-  height: 65px;
-  display: flex;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.nav div.main_list ul li {
-  width: auto;
-  height: 65px;
-  padding: 0;
-  padding-left: 43px;
-  padding-right: 3rem;
-}
-
-.nav div.main_list ul li a {
-  text-decoration: none;
-  color: rgb(253, 253, 253);
-  line-height: 65px;
-  font-size: 2.4rem;
-}
-
-.nav div.main_list ul li a:hover {
-  color: #ff0000;
-}
-
-
-@media screen and (max-width: 768px) {
-  .nav{
-    background-color: #47555E;
-  }
-  .nav div.main_list ul {
-    flex-direction: column;
-  }
-  .nav div.main_list{
-    float: none;
-  }
-
-  .nav div.main_list ul li {
-    background-color: #303841;
-    /* border: 10px 10px white solid; */
-  }
-
+    min-height: 110vh;
+    background-color: #4ca1af;
+    background-image: linear-gradient(135deg, #4ca1af 0%, #c4e0e5 100%);
 }

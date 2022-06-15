@@ -22,11 +22,11 @@ html {
   }
   
   .login h2 {
-    margin: 0 0 30px;
-    padding-bottom: 30px;
+    margin: 0 0 0;
+    padding-bottom: 20px;
     color: #aadaf8;
     text-align: center;
-    font-size: 2.5rem;
+    font-size: 2rem;
   }
   
   .login .user {
