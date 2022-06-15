@@ -78,7 +78,15 @@ app.post("/register", async function (req, res) {
         request.end()
         //console.log(token)
         console.log(user);
-        res.status(201).send({ user, token, "message": "Hello " + req.body.name })
+        res.json( {
+            userInfo: 
+            {
+                id : user.id,
+                name : user.name ,
+                email : user.email,
+                token : token
+            }
+        });
     } catch (e) {
         //console.log("Heelo");
         // res.status(400).send(e)
