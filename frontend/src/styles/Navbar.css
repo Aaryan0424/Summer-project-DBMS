@@ -41,8 +41,8 @@
 
 .navbar.active .nav-link:hover,
 .navbar.active .nav-link:focus {
-    color: #555;
     text-decoration: none;
+    color: rgb(248, 36, 36);
 }
 
 .navbar.active .navbar-brand {

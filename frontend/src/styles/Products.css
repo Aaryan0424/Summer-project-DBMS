@@ -1,0 +1,15 @@
+
+#img-container {
+    overflow: hidden;
+  }
+  
+  
+  #img-container img {
+    transition: all 0.8s ease;
+  }
+  
+  
+  #img-container:hover img {
+    opacity: 0.8;
+    transform: scale(1.2);
+  }
