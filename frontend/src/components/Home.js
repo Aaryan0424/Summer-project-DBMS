@@ -5,6 +5,7 @@ import Products from "./Products";
 import "../styles/Navbar.css"; 
 import "../styles/Home.css";
 
+
 const Home = () => {
   return (
     <div className="main">
