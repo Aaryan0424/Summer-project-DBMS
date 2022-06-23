@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="/item" method="POST" >
+        <ul>
+            <li><input name="itemNo" placeholder="itemNo" type="number"></li>
+            <br>
+            <li><input name="description" placeholder="Description" type="text"></li>
+            <br>
+            <li><input name="price" placeholder="price" type="number"></li>
+            <br>
+            <li><input name="stock" placeholder="stock" type="number"></li>
+            <br>
+            <li><input name="brand" placeholder="brand" type="text"></li>
+            <br>
+            <li><input name="colour" placeholder="colour" type="text"></li>
+            <br>
+            <li><input name="material" placeholder="material" type="text"></li>
+            <br>
+            <li><input name="rating" placeholder="rating" type="number"></li>
+            <br>
+            <li><input name="weight" placeholder="weight" type="number"></li>
+            <br>
+            <li><button type="submit">Submit</button></li>
+        </ul>
+    </form>
+</body>
+</html>
+<!-- itemNo:{
+    type:Number,
+    required:true,
+    unique:true
+},
+description:{
+    type:String,
+    trim:true,
+    required:true
+},
+price:{
+    type:Number,
+    required:true,
+    validate(value) {
+        if (value < 0) {
+            throw new Error('Price must be positive')
+        }
+    }
+},
+stock:{
+    type:Number,
+    require:true
+},
+brand:{
+    type:String,
+    trim:true,
+    required:true
+},
+colour:{
+    type:String
+},
+material:{
+    type:String
+},
+rating:{
+    type:Number
+},
+weight:{
+    type:Number
+} -->

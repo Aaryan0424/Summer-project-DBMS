@@ -4,11 +4,15 @@ const bodyParser = require("body-parser");
 require('dotenv').config()
 const app = express();
 const User = require('./models/user')
+const Item=require('./models/item')
 const cookieParser = require("cookie-parser");
 const sessions = require('express-session');
 const MongoStore=require("connect-mongo");
 const oneDay = 1000 * 60 * 60 * 24;
+const cors = require("cors")
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json())
+app.use(cors())
 app.use(cookieParser());
 app.use(sessions({
     secret: process.env.SESSION_SECRET,
@@ -23,7 +27,7 @@ app.use(sessions({
 }));
 app.get("/", function (req, res) {
     let ses=req.session
-    console.log(ses);
+    //console.log(ses);
     if(ses.userid!=null){
         return res.redirect('/user');
     }
@@ -43,10 +47,9 @@ mongoose.connect(process.env.DB_URL, {
     useNewUrlParser: true,
 })
 app.post("/register", async function (req, res) {
-   // console.log(req.body)
+//    console.log(req.body)
     const user = new User(req.body)
     try {
-
         await user.save()
         const token = await user.generateAuthTokens();
         const data = {
@@ -75,36 +78,60 @@ app.post("/register", async function (req, res) {
         request.write(jsonData);
         request.end()
         //console.log(token)
+        console.log(user);
         res.status(201).send({ user, token, "message": "Hello " + req.body.name })
     } catch (e) {
         //console.log("Heelo");
-        res.status(400).send(e)
+        // res.status(400).send(e)
+        res.status(400).json({
+            message : e.message,
+        });
     }
 });
 app.post("/login", async function (req, res) {
     try {
         const user = await User.findByCredentials(req.body.email, req.body.password)
+        console.log(user);
         const token = await user.generateAuthTokens();
         var session;
         session=req.session;
         session.userid=req.body.email;
         console.log(req.session)
         req.session.save();
-        res.send(`Hey there, welcome <a href='/logout'>click to logout</a>`);
+        res.json({
+            userInfo: 
+            {
+                id : user.id,
+                name : user.name ,
+                email : user.email,
+                token : token
+            }
+        })
         await user.save()
-        //res.send({ user, token })
     }
-    catch (e) {
-        res.status(400).send()
+    catch(error) {
+        // console.log(error);
+        res.status(400).json({
+            message : error.message,
+        });
     }
 });
-app.get("/user",function(req,res){
-    res.send("Hello click here to <a href='/logout'> logout </a>")
-})
 app.get("/logout",function(req,res){
+    // res.send("User has been logged out");
+    console.log("Session destroyed and logged out successfully.");
     req.session.destroy();
-    res.redirect('/');
+    res.redirect('http://localhost:3000/');
 });
-app.listen(3000, function (req, res) {
-    console.log("Running on 3000");
+
+app.get("/item",async function(req,res){
+  res.sendFile(__dirname+"/item.html");
+})
+app.post("/item",async function(req,res){
+    const item=new Item(req.body);
+    await item.save();
+    console.log(req.body);
+    res.send("Item Saved!!");
+})
+app.listen(5000, function (req, res) {
+    console.log("Running on 5000 port");
 });
