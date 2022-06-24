@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 require('dotenv').config()
 const app = express();
 const User = require('./models/user')
+const Item=require('./models/item')
 const cookieParser = require("cookie-parser");
 const sessions = require('express-session');
 const MongoStore=require("connect-mongo");
@@ -78,15 +79,7 @@ app.post("/register", async function (req, res) {
         request.end()
         //console.log(token)
         console.log(user);
-        res.json( {
-            userInfo: 
-            {
-                id : user.id,
-                name : user.name ,
-                email : user.email,
-                token : token
-            }
-        });
+        res.status(201).send({ user, token, "message": "Hello " + req.body.name })
     } catch (e) {
         //console.log("Heelo");
         // res.status(400).send(e)
@@ -129,6 +122,21 @@ app.get("/logout",function(req,res){
     req.session.destroy();
     res.redirect('http://localhost:3000/');
 });
+
+app.get("/item",async function(req,res){
+  res.sendFile(__dirname+"/item.html");
+})
+app.post("/item",async function(req,res){
+    const item=new Item(req.body);
+    await item.save();
+    console.log(req.body);
+    res.send("Item Saved!!");
+})
+
+app.get("/products",async function(req,res){
+    const products = await Item.find({});
+    res.json(products);
+})
 app.listen(5000, function (req, res) {
     console.log("Running on 5000 port");
 });
