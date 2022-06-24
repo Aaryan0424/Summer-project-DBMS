@@ -1,18 +1,40 @@
-import { React } from "react";
+import { React, useEffect } from "react";
 import "../styles/Products.css";
-import Items from "../Items";
-
+// import Items from "../../../Backend/Items";
+import {useDispatch , useSelector } from "react-redux";
+import { listItems } from "../actions/ProductActions";
 
 const Products = () => {
+
+
+  const dispatch = useDispatch();
+
+  
+  const productList = useSelector( (state) => state.productList);
+  const {loading , error , items } = productList;
+  
+  useEffect( () => {
+    dispatch(listItems());
+  },[dispatch]);
+
+
+  const pets = [];
   return (
     <section style={{ backgroundColor: "#eee" }}>
       <div class="text-center container py-5">
         <h4 class="mt-4 mb-5">
           <strong>Bestsellers</strong>
         </h4>
-
+        {loading ? (
+          <h2>Loading.....</h2>
+        ) 
+        : error ? (
+          <h3>{error}</h3>
+        )
+        :
+        (
         <div class="row">
-          {Items.map((item) => (
+          {items && items.map((item) => (
             <div className = "col-lg-4 col-md-12 mb-4">
               <div class="card">
                 <div
@@ -21,7 +43,7 @@ const Products = () => {
                   data-mdb-ripple-color="light"
                 >
                   <img
-                    src={item.img}
+                    src={item.itemImg}
                     classNameass="w-100"
                   />
                 </div>
@@ -29,7 +51,7 @@ const Products = () => {
                     <div className="mask">
                       <div className="d-flex justify-content-start align-items-end h-100">
                         <h5>
-                          <span className="badge bg-primary ms-2">{item._id}</span>
+                          <span className="badge bg-primary ms-2">{item.itemNo}</span>
                         </h5>
                       </div>
                     </div>
@@ -42,7 +64,7 @@ const Products = () => {
                   </a>
                 <div className="card-body">
                   <a href="" className="text-reset">
-                    <h5 className="card-title mb-3">{item.name}</h5>
+                    <h5 className="card-title mb-3">{item.itemName}</h5>
                   </a>
                   <a href="" className="text-reset">
                     <p>{item.description}</p>
@@ -59,9 +81,11 @@ const Products = () => {
             </div>
           ))}
         </div>
+        )}
       </div>
     </section>
   );
 };
 
 export default Products;
+
