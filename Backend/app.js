@@ -137,6 +137,22 @@ app.get("/products",async function(req,res){
     const products = await Item.find({});
     res.json(products);
 })
+
+app.get("/products/:id",async function(req,res){
+        const product = await Item.findById(req.params.id)
+        if(product)
+        {
+
+            res.json(product);
+        }
+        else
+        {
+            res.status(404).json({
+                message: 'Product Not Found'
+            })
+        }
+})
+
 app.listen(5000, function (req, res) {
     console.log("Running on 5000 port");
 });

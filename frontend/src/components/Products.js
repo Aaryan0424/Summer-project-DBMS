@@ -3,6 +3,8 @@ import "../styles/Products.css";
 // import Items from "../../../Backend/Items";
 import {useDispatch , useSelector } from "react-redux";
 import { listItems } from "../actions/ProductActions";
+import { useNavigate } from "react-router-dom";
+
 
 const Products = () => {
 
@@ -17,6 +19,11 @@ const Products = () => {
     dispatch(listItems());
   },[dispatch]);
 
+  const navigate = useNavigate();
+  const pathHandler = (_id) => {
+    const path = `/Dashboard/?id=${_id}`; 
+    navigate(path);
+  }
 
   const pets = [];
   return (
@@ -71,7 +78,8 @@ const Products = () => {
                   </a>
                   <h6 className="mb-3">{item.price}</h6>
                     <div class="d-flex flex-row">
-                        <button type="button" style = {{borderRadius : "10px" , fontSize : "0.8rem" }}class="btn btn-primary flex-fill me-2 btn-sm" data-mdb-ripple-color="dark">
+                        <button type="button" style = {{borderRadius : "10px" , fontSize : "0.8rem" }} class="btn btn-primary flex-fill me-2 btn-sm" data-mdb-ripple-color="dark"
+                        onClick = {() => pathHandler(item._id)}>
                         Add to Cart
                         </button>
                         <button type="button" style = {{borderRadius : "10px"}} class="btn btn-danger flex-fill ms-1">Learn</button>
