@@ -1,14 +1,16 @@
 import {React} from 'react';
 import { useEffect , useState } from "react";
 import "../styles/Navbar.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
 const Dashboard = () => {
     document.body.style.background = "#47555E";
 
     const userLogin = useSelector((state) => state.userLogin);
     
     const { loading , error , userInfo } = userLogin;
-
+    
+    const dispatch = useDispatch()
     const check = () =>{
         if(userInfo){
         return true;
@@ -18,6 +20,8 @@ const Dashboard = () => {
     }
     const Logouthandler = (event) => { 
         localStorage.removeItem('userInfo');
+        localStorage.removeItem('cartItems');
+        dispatch({type : 'CART_RESET'}); 
     }
     useEffect( () => {
         const handlescroll = () => {

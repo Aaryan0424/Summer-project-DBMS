@@ -7,12 +7,12 @@ export const addToCart = (id) => async (dispatch , getState) => {
     dispatch({
         type: CART_ADD_ITEM,
         payload: {
+            product_id : data._id,
             product: data.itemNo,
             name : data.itemName,
             image : data.itemImg,
             price : data.price,
         }
     })
-
     localStorage.setItem("cartItems",JSON.stringify(getState().cart.cartItems))
 }

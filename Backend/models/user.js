@@ -52,9 +52,10 @@ const userSchema = new mongoose.Schema({
                 throw new Error('password cannot contain password');
             }
         }
-
-
     },
+
+    userCart: [],
+    
     tokens: [{
         token: {
             type: String,

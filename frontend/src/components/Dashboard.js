@@ -2,7 +2,7 @@
 import { React, useEffect, useState } from 'react';
 import Navbar from './Navbar';
 import "../styles/Dashboard.css";
-import { useDispatch } from 'react-redux';
+import { useDispatch , useSelector } from 'react-redux';
 import { addToCart } from "../actions/CartActions"
 const Dashboard = ({match,location,history}) => {
 
@@ -19,6 +19,10 @@ const Dashboard = ({match,location,history}) => {
     },[dispatch,productId])
 
     const [totPrice , settotPrice] = useState(0);
+
+    const cartList = useSelector( (state) => state.cart);
+    const { cartItems } = cartList;
+
 
     const orders = [
         {
@@ -44,26 +48,28 @@ const Dashboard = ({match,location,history}) => {
                 <div className = 'row' style={{ marginRight : "55px" , marginLeft : "55px"}} >
                     <div className='col-md-8'>
                         <h1>Shopping Cart.</h1>
-                        {orders[0] ? null : <div role="alert" class="fade alert-custom alert alert-info show" style={{display: "block"}}>
+                        {
+                        cartItems && cartItems.length === 0 ? <div role="alert" class="fade alert-custom alert alert-info show" style={{display: "block"}}>
                             Your Cart is empty. 
                             <a href="/">
                                 Go Back.
                             </a> 
-                        </div>}
-                        {orders && orders.map((product) => (<div className='list-group list-group-flush' style={{marginBottom : "10px"}}>
+                        </div> : null
+                        }
+                        {cartItems && cartItems.map((product) => (<div className='list-group list-group-flush' style={{marginBottom : "10px"}}>
                             <div className='list-group-item' id='item-holder'>
                                 <div className='row' style={{display : "flex" , alignItems : "center" }}>
                                     <div className='col-md-2'>
-                                        <img src={product.itemImg} alt='product' className='product-image img-fluid rounded' />
+                                        <img src={product.image} alt='product' className='product-image img-fluid rounded' />
                                     </div>
                                     <div class="col-md-4" id='item-checker'>
-                                        <a href="/product/615963e225a7193804bfd654" style={{padding : "10px"}}>{product.itemName}</a>
+                                        <a href="/product/615963e225a7193804bfd654" style={{padding : "10px"}}>{product.name}</a>
                                     </div>
                                     <div class="d-none d-md-flex col-md-3" style= {{alignItems: "center" , justifyContent: "space-evenly"}}>
                                         {product.price}
                                         <div>
                                             <i class="fas fa-times" style= {{fontSize: "0.7em"}}></i>
-                                            {product.qty}
+                                            {1}
                                         </div>
                                     </div>
                                     <div class="d-none d-md-flex col-md-3" style= {{alignItems: "center" , justifyContent: "space-between"}}>
@@ -84,7 +90,7 @@ const Dashboard = ({match,location,history}) => {
                                             {product.price}
                                         <div class="ms-1">
                                             <i class="fas fa-times" style = {{fontSize: "0.7em"}}></i>
-                                            {product.qty}
+                                            {1}
                                             </div>
                                             </div>
                                             <div class="d-flex" style= {{alignItems: "center" , justifyContent: "space-between" , width : "50%"}}>

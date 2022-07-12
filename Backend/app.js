@@ -104,6 +104,7 @@ app.post("/login", async function (req, res) {
                 id : user.id,
                 name : user.name ,
                 email : user.email,
+                usercart: user.userCart,
                 token : token
             }
         })
@@ -142,7 +143,6 @@ app.get("/products/:id",async function(req,res){
         const product = await Item.findById(req.params.id)
         if(product)
         {
-
             res.json(product);
         }
         else
